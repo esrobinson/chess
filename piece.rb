@@ -10,5 +10,9 @@ class Piece
   def moves
     raise NotImplementedError
   end
+
+  def on_board?(pos)
+    pos.all? { |coord| coord.between?(0, 7) }
+  end
 end
 
