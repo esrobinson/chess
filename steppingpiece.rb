@@ -11,9 +11,7 @@ class SteppingPiece < Piece
       x += x_step
       y += y_step
 
-      if on_board?([x, y])
-        moves << [x, y] unless @color == @board[x, y].color
-      end
+      moves << [x, y] if valid_move?(x, y)
     end
 
     moves

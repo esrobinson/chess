@@ -1,4 +1,4 @@
-require_relative  'piece'
+require_relative 'piece'
 
 class SlidingPiece < Piece
 
@@ -8,14 +8,15 @@ class SlidingPiece < Piece
     DIRECTIONS.each do |dir|
       x, y = @pos
       x_step, y_step = dir
+      x += x_step
+      y += y_step
 
 
-      while @board.empty?(x += x_step, y += y_step) && on_board?([x, y])
+      while valid_move?(x,y)
         moves << [x, y]
-      end
-
-      if on_board?([x, y])
-        moves << [x, y] unless @color == @board[x, y].color
+        break unless @board.empty?([x, y])
+        x += x_step
+        y += y_step
       end
     end
 
