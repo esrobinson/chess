@@ -11,8 +11,13 @@ class Piece
     raise NotImplementedError
   end
 
-  def on_board?(pos)
-    pos.all? { |coord| coord.between?(0, 7) }
+  def on_board?(x, y)
+    [x, y].all? { |coord| coord.between?(0, 7) }
+  end
+
+  def valid_move?(x, y)
+    return false unless on_board?(pos)
+    (@board.empty?([x, y]) || @color != @board[x, y].color)
   end
 end
 
