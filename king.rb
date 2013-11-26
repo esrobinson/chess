@@ -1,6 +1,6 @@
-require_relative 'slidingpiece'
+require_relative 'steppingpiece'
 
-class Queen < SlidingPiece
+class King < SteppingPiece
   DIRECTIONS = [
     [-1,  0],
     [ 0, -1],
