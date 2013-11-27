@@ -1,20 +1,22 @@
+require_relative 'error'
+
 class Piece
   SYMBOLS = {
     :w => {
-      :King => "K",
-      :Queen => "Q",
-      :Rook => "R",
-      :Bishop => "B",
-      :Knight => "N",
-      :Pawn => "P",
+      :King =>   "\u2654",
+      :Queen =>  "\u2655",
+      :Rook =>   "\u2656",
+      :Bishop => "\u2657",
+      :Knight => "\u2658",
+      :Pawn =>   "\u2659",
     },
     :b => {
-      :King => "k",
-      :Queen => "q",
-      :Rook => "r",
-      :Bishop => "b",
-      :Knight => "n",
-      :Pawn => "p",
+      :King =>   "\u265A",
+      :Queen =>  "\u265B",
+      :Rook =>   "\u265C",
+      :Bishop => "\u265D",
+      :Knight => "\u265E",
+      :Pawn =>   "\u265F",
     }
   }
 
@@ -27,8 +29,11 @@ class Piece
 
   def move(x, y)
     unless moves.include?([x, y])
-      raise InvalidMoveError, "Invalid Move."
+      raise InvalidMoveError
     end
+
+    raise MovedIntoCheckError if move_into_check?(x, y)
+
     move!(x,y)
   end
 
@@ -41,14 +46,18 @@ class Piece
     raise NotImplementedError
   end
 
+  def can_move?
+    moves.any? { |x, y| !move_into_check?(x, y) }
+  end
+
+
   def on_board?(x, y)
     [x, y].all? { |coord| coord.between?(0, 7) }
   end
 
   def valid_move?(x, y)
     return false unless on_board?(x, y)
-    return false unless (@board.empty?(x, y) || @color != @board[x, y].color)
-    !move_into_check(x, y)
+    (@board.empty?(x, y) || @color != @board[x, y].color)
   end
 
   def move_into_check?(x, y)
@@ -61,8 +70,8 @@ class Piece
     SYMBOLS[@color][self.class.to_s.to_sym]
   end
 
-  def dup
-    self.class.new(@pos, @color, @board)
+  def dup(new_board)
+    self.class.new(@pos, @color, new_board)
   end
 
 end

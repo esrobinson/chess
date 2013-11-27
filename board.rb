@@ -41,9 +41,9 @@ class Board
     starting_pieces
   end
 
-  def move(start, end)
-    raise NoMoveError, "No piece there" if empty(start[0], start[1])
-    self[start[0], start[1]].move(end[0], end[1])
+  def move(start_pos, end_pos)
+    raise NoMoveError if empty?(start_pos[0], start_pos[1])
+    self[start_pos[0], start_pos[1]].move(end_pos[0], end_pos[1])
   end
 
   def capture(x, y)
@@ -60,25 +60,29 @@ class Board
 
   def checkmate?(color)
     in_check?(color) && @pieces.none? do |piece|
-      piece.color == color && !piece.moves.empty?
+      piece.color == color && piece.can_move?
     end
   end
 
   def dup
-    dup = Board.new()
-    dup.pieces = @pieces.map(&:dup)
-    dup
+    dup_board = Board.new()
+    dup_board.pieces = @pieces.map{ |piece| piece.dup(dup_board) }
+    dup_board
   end
 
   def to_s
+    files = "  A B C D E F G H\n"
+    ranks = ["1 ","2 ","3 ","4 ","5 ","6 ","7 ","8 "]
+    files +
     (0..7).map do |rank|
-      (0..7).map do |file|
+      ranks[rank] + (0..7).map do |file|
         if empty?(file, rank)
           "*"
         else
           self[file, rank].to_s
         end
       end.join(" ")
+
     end.reverse.join("\n")
   end
 
