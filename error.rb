@@ -18,3 +18,9 @@ class MovedIntoCheckError < MoveError
     super
   end
 end
+
+class WrongColorError < MoveError
+  def initialize(msg = "Can't move other player's pieces")
+    super
+  end
+end
