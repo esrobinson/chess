@@ -6,6 +6,8 @@ require_relative 'knight'
 require_relative 'pawn'
 
 class Board
+  attr_accessor :pieces
+
   def initialize
     @pieces = starting_position(:w) + starting_position(:b)
   end
@@ -39,8 +41,33 @@ class Board
     starting_pieces
   end
 
+  def move(start, end)
+    raise NoMoveError, "No piece there" if empty(start[0], start[1])
+    self[start[0], start[1]].move(end[0], end[1])
+  end
+
   def capture(x, y)
     @pieces.delete(self[x, y])
+  end
+
+  def king(color)
+    @pieces.find { |piece| piece.is_a?(King) && piece.color == color }
+  end
+
+  def in_check?(color)
+    @pieces.any? { |piece| piece.moves.include?( king(color).pos ) }
+  end
+
+  def checkmate?(color)
+    in_check?(color) && @pieces.none? do |piece|
+      piece.color == color && !piece.moves.empty?
+    end
+  end
+
+  def dup
+    dup = Board.new()
+    dup.pieces = @pieces.map(&:dup)
+    dup
   end
 
   def to_s

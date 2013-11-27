@@ -29,7 +29,10 @@ class Piece
     unless moves.include?([x, y])
       raise InvalidMoveError, "Invalid Move."
     end
+    move!(x,y)
+  end
 
+  def move!(x, y)
     @board.capture(x, y) unless @board.empty?(x, y)
     @pos = [x, y]
   end
@@ -44,11 +47,23 @@ class Piece
 
   def valid_move?(x, y)
     return false unless on_board?(x, y)
-    (@board.empty?(x, y) || @color != @board[x, y].color)
+    return false unless (@board.empty?(x, y) || @color != @board[x, y].color)
+    !move_into_check(x, y)
+  end
+
+  def move_into_check?(x, y)
+    dup_board = @board.dup
+    dup_board[@pos[0], @pos[1]].move!(x, y)
+    dup_board.in_check?(@color)
   end
 
   def to_s
     SYMBOLS[@color][self.class.to_s.to_sym]
   end
+
+  def dup
+    self.class.new(@pos, @color, @board)
+  end
+
 end
 
