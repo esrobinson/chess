@@ -11,4 +11,5 @@ class Queen < SlidingPiece
     [ 1, -1],
     [ 1,  1]
     ]
+
 end

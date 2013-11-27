@@ -5,7 +5,7 @@ class SteppingPiece < Piece
   def moves
     moves = []
 
-    DIRECTIONS.each do |dir|
+    self.class::DIRECTIONS.each do |dir|
       x, y = @pos
       x_step, y_step = dir
       x += x_step

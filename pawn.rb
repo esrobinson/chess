@@ -3,12 +3,12 @@ require_relative 'piece'
 class Pawn < Piece
 
   def initialize(pos, color, board)
-    super(pos, color, board)
+    super
     @moved = false
   end
 
-  def move(pos)
-    super(pos)
+  def move(x, y)
+    super
     @moved = true
   end
 
@@ -29,6 +29,7 @@ class Pawn < Piece
     moves << [x-1, y] if valid_move?(x-1, y) && !@board.empty?(x-1, y)
     moves << [x+1, y] if valid_move?(x+1, y) && !@board.empty?(x+1, y)
 
+    moves
   end
 
 end
