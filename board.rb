@@ -49,12 +49,22 @@ class Board
        pos: [start_pos[0], (start_pos[1] + end_pos[1])/2 ] }
   end
 
+  def castle(color, side)
+    raise CantCastleError unless can_castle?(color, side)
+    king_to_castle = king(color)
+    rank = king_to_castle.pos[1]
+    file = side == :l ? 0 : 7
+    rook = self[file, rank]
+    king_to_castle.castle(side)
+    rook.castle(side)
+  end
+
   def can_castle?(color, side)
     king_to_castle = king(color)
     rank = king_to_castle.pos[1]
     file = side == :l ? 0 : 7
-    return false unless self[rank, file].is_a?(Rook)
-    rook = self[rank, file]
+    return false unless self[file, rank].is_a?(Rook)
+    rook = self[file, rank]
     return false if rook.moved || king_to_castle.moved
     validate_squares_for_castle(color, side, rank)
   end

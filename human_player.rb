@@ -13,6 +13,9 @@ class HumanPlayer
   def move
     puts "Enter a move. (Format: a1 b6)"
     positions = gets.chomp.split(' ')
+    if positions[0] == 'cl' or positions[0] == 'cr'
+      return positions[0]
+    end
     parse_move(positions)
   end
 

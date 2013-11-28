@@ -31,6 +31,12 @@ class NoMoveError < MoveError
   end
 end
 
+class CantCastleError < MoveError
+  def initialize(msg = "You can't castle to that side")
+    super
+  end
+end
+
 class PawnChoiceError < StandardError
   def initialize(msg = "Choose one of the given pieces")
     super

@@ -30,9 +30,15 @@ class Game
     def make_move(current_player)
       puts "#{current_player.color == :w ? "White" : "Black"} to move."
       start_pos, end_pos = current_player.move
-      result = @board.move(start_pos, end_pos, current_player.color)
+      if start_pos == 'cl'
+        @board.castle(current_player.color, :l)
+      elsif start_pos == 'cr'
+        @board.castle(current_player.color, :r)
+      else
+        result = @board.move(start_pos, end_pos, current_player.color)
 
-      promote_pawn(current_player, end_pos) if result == :p
+        promote_pawn(current_player, end_pos) if result == :p
+      end
     end
 
     def promote_pawn(current_player, end_pos)

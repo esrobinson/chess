@@ -15,4 +15,10 @@ class Rook < SlidingPiece
     @moved = true
   end
 
+  def castle(side)
+    file = side == :l ? 3 : 5
+    move!(file, @pos[1])
+    @moved = true
+  end
+
 end

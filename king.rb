@@ -24,4 +24,10 @@ class King < SteppingPiece
     @moved = true
   end
 
+  def castle(side)
+    file = side == :l ? 2 : 6
+    move!(file, @pos[1])
+    @moved = true
+  end
+
 end
