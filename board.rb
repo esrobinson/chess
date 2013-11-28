@@ -49,6 +49,30 @@ class Board
        pos: [start_pos[0], (start_pos[1] + end_pos[1])/2 ] }
   end
 
+  def can_castle?(color, side)
+    king_to_castle = king(color)
+    rank = king_to_castle.pos[1]
+    file = side == :l ? 0 : 7
+    return false unless self[rank, file].is_a?(Rook)
+    rook = self[rank, file]
+    return false if rook.moved || king_to_castle.moved
+    validate_squares_for_castle(color, side, rank)
+  end
+
+  def validate_squares_for_castle(color, side, rank)
+    files_should_be_empty = side == :l ? (1...4) : (5...7)
+    return false unless files_should_be_empty.all? do |file|
+      empty?(file, rank)
+    end
+    files_not_threatened = side == :l ? (0..4) : (4..7)
+    files_not_threatened.all? do |file|
+      @pieces.none? do |piece|
+        piece.color != color && piece.moves.include?( [file, rank] )
+      end
+    end
+  end
+
+
   def capture(x, y)
     @pieces.delete(self[x, y])
   end
@@ -61,6 +85,11 @@ class Board
     in_check?(color) && @pieces.none? do |piece|
       piece.color == color && piece.can_move?
     end
+    # in_check?(color) && pieces_for(color).none?(&:can_move?)
+  end
+
+  def pieces_for(color)
+    @pieces.select { |piece| piece.color == color }
   end
 
   def dup
