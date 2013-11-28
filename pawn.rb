@@ -15,8 +15,10 @@ class Pawn < Piece
       end
     end
 
-    moves << [x-1, y] if valid_move?(x-1, y) && !@board.empty?(x-1, y)
-    moves << [x+1, y] if valid_move?(x+1, y) && !@board.empty?(x+1, y)
+    moves << [x-1, y] if valid_move?(x-1, y) &&
+                        (!@board.empty?(x-1, y) || @board.en_passant_pos?(x-1, y))
+    moves << [x+1, y] if valid_move?(x+1, y) &&
+                        (!@board.empty?(x+1, y) || @board.en_passant_pos?(x+1, y))
 
     moves
   end

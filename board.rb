@@ -20,10 +20,33 @@ class Board
   end
 
   def move(start_pos, end_pos, color)
+    check_move(start_pos, end_pos, color)
+    piece_to_move = self[start_pos[0], start_pos[1]]
+    move_result = piece_to_move.move(end_pos[0], end_pos[1])
+    handle_en_passant(start_pos, end_pos, piece_to_move)
+    move_result
+  end
+
+  def check_move(start_pos, end_pos, color)
     raise NoMoveError if start_pos.nil? || end_pos.nil?
     raise NoPieceError if empty?(start_pos[0], start_pos[1])
     raise WrongColorError if self[start_pos[0], start_pos[1]].color != color
-    self[start_pos[0], start_pos[1]].move(end_pos[0], end_pos[1])
+  end
+
+  def en_passant_pos?(x, y)
+    return false if @en_passant.nil?
+    [x, y] == @en_passant[:pos]
+  end
+
+  def handle_en_passant(start_pos, end_pos, piece_to_move)
+    if piece_to_move.is_a?(Pawn) && en_passant_pos?(end_pos[0], end_pos[1])
+      @pieces.delete(@en_passant[:piece])
+    end
+    @en_passant = nil
+    return unless piece_to_move.is_a?(Pawn)
+    return unless (start_pos[1] - end_pos[1]).abs > 1
+    @en_passant = { piece: piece_to_move,
+       pos: [start_pos[0], (start_pos[1] + end_pos[1])/2 ] }
   end
 
   def capture(x, y)
