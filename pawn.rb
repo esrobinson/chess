@@ -23,7 +23,7 @@ class Pawn < Piece
 
   def move(x, y)
     super
-    @board.promote_pawn(self) if pos[1] == (@color == :w ? 7 : 0)
+    :p if pos[1] == (@color == :w ? 7 : 0)
   end
 
   private

@@ -17,8 +17,6 @@ class SlidingPiece < Piece
         x += x_step
         y += y_step
       end
-
-      moves
     end
 
     moves

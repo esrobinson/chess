@@ -24,3 +24,15 @@ class WrongColorError < MoveError
     super
   end
 end
+
+class NoMoveError < MoveError
+  def initialize(msg = "You didn't input a move")
+    super
+  end
+end
+
+class PawnChoiceError < StandardError
+  def initialize(msg = "Choose one of the given pieces")
+    super
+  end
+end

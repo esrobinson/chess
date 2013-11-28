@@ -20,6 +20,7 @@ class Board
   end
 
   def move(start_pos, end_pos, color)
+    raise NoMoveError if start_pos.nil? || end_pos.nil?
     raise NoPieceError if empty?(start_pos[0], start_pos[1])
     raise WrongColorError if self[start_pos[0], start_pos[1]].color != color
     self[start_pos[0], start_pos[1]].move(end_pos[0], end_pos[1])
@@ -62,10 +63,11 @@ class Board
     end.reverse.join("\n")
   end
 
-  def promote_pawn(pawn)
+  def promote_pawn(end_pos, chosen_piece)
+    pawn = self[end_pos[0], end_pos[1]]
     position, color = pawn.pos, pawn.color
     @pieces.delete(pawn)
-    @pieces << Queen.new(position, color, self)
+    @pieces << chosen_piece.new(position, color, self)
   end
 
   protected

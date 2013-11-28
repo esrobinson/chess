@@ -56,6 +56,7 @@ class Piece
     def move!(x, y)
       @board.capture(x, y) unless @board.empty?(x, y)
       @pos = [x, y]
+      nil
     end
 
   private

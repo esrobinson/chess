@@ -1,5 +1,5 @@
-require_relative 'human_player'
 require_relative 'board'
+require_relative 'human_player'
 require 'yaml'
 
 class Game
@@ -30,7 +30,14 @@ class Game
     def make_move(current_player)
       puts "#{current_player.color == :w ? "White" : "Black"} to move."
       start_pos, end_pos = current_player.move
-      @board.move(start_pos, end_pos, current_player.color)
+      result = @board.move(start_pos, end_pos, current_player.color)
+
+      promote_pawn(current_player, end_pos) if result == :p
+    end
+
+    def promote_pawn(current_player, end_pos)
+      chosen_piece = current_player.choose_pawn_promotion
+      @board.promote_pawn(end_pos, chosen_piece)
     end
 end
 
